@@ -1,0 +1,145 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+    <p>
+      Input 1: <input type = "text" id="equation">
+    </p>
+    <p>
+    Input 2: <input type = "text" id="equation2">
+    </p>
+    <input type = button value = "submit" id="submit">
+    <p id="foo">OUTPUT</p>
+    <table id="output">
+      <tr>
+        <th colspan=2>Input Value</th>
+        <th colspan=2>Result</th>
+      </tr>
+      <tr>
+        <th>A</th>
+        <th>B</th>
+        <th>#1</th>
+        <th>#2</th>
+      </tr>
+      
+    </table>
+  </body>
+</html>
+<script>
+function tableCreate(){
+var body=document.getElementsByTagName('body')[0];
+var tbl=document.createElement('table');
+tbl.style.width='100%';
+tbl.setAttribute('border','1');
+var tbdy=document.createElement('tbody');
+var tr = document.createElement('tr');
+for (var i = 0 ; i < 5; i++)
+{
+  var th = document.createElement('th');
+  var newContent = document.createTextNode("wow");
+  th.appendChild(newContent);
+  tr.appendChild(th);
+}
+tbdy.appendChild(tr);
+for(var i=0;i<5;i++){
+    var tr=document.createElement('tr');
+    for(var j=0;j<2;j++){
+        if(i==2 && j==1){
+                break
+                 } else {
+        var td=document.createElement('td');
+        td.appendChild(document.createTextNode('\u0020'))
+        i==1&&j==1?td.setAttribute('rowSpan','2'):null;
+        tr.appendChild(td)
+        }
+    }
+    tbdy.appendChild(tr);
+}
+tbl.appendChild(tbdy);
+body.appendChild(tbl)
+}
+function getUnique(s)
+{
+  var chars = [];
+  for( i = 0; i < s.length; i++)
+  {
+    console.log(s[i] + /[A-Z]/gi.test(s[i]).toString());
+    if(chars.indexOf(s[i])==-1 && /[A-Z]/gi.test(s[i]))
+    {
+      chars.push(s[i]);
+    }
+  }
+  return chars;
+};
+function insertAt(src, index, str) {
+    return src.substr(0, index) + str + src.substr(index)
+};
+function parseString(str) {
+  i = str.search(/[A-Z][A-Z]/gi);
+  while(i != -1)
+  {
+    str = insertAt(str, i+1, "&&");
+    i = str.search(/[A-Z][A-Z]/gi);
+  }
+  str = str.replace(/[+]/g,"||").replace(/[)][(]/g, ")&&(").replace(/\^/g, "!=");
+  return str;
+};
+
+var x = document.getElementById("equation").value;
+var y = x.replace("+","&&").replace(")(",")||(");
+var z = "function wow() {return(" + y +  ");}";
+var gooby = false;
+document.write("HELLO THERE");
+var table = document.getElementById("output");
+document.getElementById("submit").onclick = function() {
+  tableCreate();
+  var x = document.getElementById("equation").value;
+  var y = parseString(x);
+  var uniques1 = getUnique(x);
+  uniques1 = uniques1.join(",");
+  var z = "function wow(" + uniques1 + ") {return(" + y +  ");}";
+  var a = document.getElementById("equation2").value;
+  var b = parseString(a);
+  var uniques2 = getUnique(a);
+  uniques2 = uniques2.join(",");
+  var c = "function equation2(" + uniques2 + ") {return(" + b +  ");}";
+  eval(z);
+  eval(c);
+  var A;
+  var B;
+  for( i = 1 ; i < 5 ; i ++)
+    {
+      var row = table.insertRow(i+1);
+      
+      if(i%2)
+        {
+          B = false;
+        }
+      else
+        {
+          B = true;
+        }
+      if(i>2)
+        {
+          A = true;
+        }
+     else
+       {
+         A = false;
+       }
+      for(j = 1; j < 2; j ++)
+        {
+         var cell1 = row.insertCell(0);
+          var cell2 = row.insertCell(1);
+          var cell3 = row.insertCell(2);
+          var cell4 = row.insertCell(3);
+          cell1.innerHTML = A.toString();
+          cell2.innerHTML = B.toString(); 
+          cell3.innerHTML = wow(A,B).toString();
+          cell4.innerHTML = equation2(A,B).toString();
+        }
+    }
+  //document.getElementById("foo").innerHTML = wow(true,false).toString();
+};
+</script>

@@ -1,2 +1,2 @@
-truth-table-generator
+Truth-Table-Generator
 =====================
