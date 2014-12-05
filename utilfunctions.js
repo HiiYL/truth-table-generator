@@ -66,14 +66,6 @@ function tableCreate()
   var x = document.getElementById("equation").value;
   var a = document.getElementById("equation2").value;
   var y = parseString(x);
-  if(x == null || x == "")
-  {
-    //document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
-  }
-  else
-  {
-     document.getElementById("err-msg").innerHTML = "";
-  }
   if(a != null && a != "")
     var a_is_filled = true;
   else
