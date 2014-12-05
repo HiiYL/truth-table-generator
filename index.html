@@ -48,15 +48,16 @@
 	  <p>
 	  	<div class="formgroup" id="input_1">
 	    <label class="control-label">Input 1:</label>
-	    <input type = "text" id="equation"  class="form-control ">
+	    <input type = "text" id="equation"  class="form-control" placeholder="A(B^C')'+D">
+	    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
 	    <div id = "err-msg"></div>
 	    </div>
 	  </p>
 	  <p>
 	    <label class="control-label">Input 2:</label> 
-	    <input type = "text" id="equation2"  class="form-control">
+	    <input type = "text" id="equation2"  class="form-control" placeholder="A(B^C')'+D">
 	  </p>
-	    <input type = button value = "submit" id="submit" class="btn btn-default">
+	    <input type = button value = "submit" id="submit" class="btn btn-default" >
 	   <table id = "result" class="table table-bordered table-hover" >
 	   </table>
 	   <div id="isEqual"></div>
@@ -64,15 +65,27 @@
   	</div>
   </body>
 <script>
+$('input').bind('input propertychange', function() {
+    try{
+    	$("#input_1").removeClass("has-warning has-feedback");
+    	tableCreate();
+    }
+    catch(err)
+    {
+    	$("#input_1").addClass("has-warning has-feedback");
+    }
+});
 var table = document.getElementById("output");
 document.getElementById("submit").onclick = function() {
   var input1 = document.getElementById("equation").value;
   if(input1 == null || input1 == "")
   {
     document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+    $("#input_1").addClass("has-warning has-feedback");
   }
   else
   {
+  	 $("#input_1").removeClass("has-warning has-feedback");
      document.getElementById("err-msg").innerHTML = "";
   }
   /*
