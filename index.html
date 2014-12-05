@@ -62,7 +62,7 @@
 	  </p>
 	   <table id = "result" class="table table-bordered table-hover" >
 	   </table>
-	   <div id="isEqual"></div>
+	   <div id="isEqual" class = "text-center"></div>
 	   </div>
   	</div>
   </body>
@@ -70,6 +70,17 @@
 $('input').bind('input propertychange', function() {
 	$("#input_1").removeClass("has-warning has-feedback");
 	$("#input_2").removeClass("has-warning has-feedback");
+	var input1 = document.getElementById("equation").value;
+	if(input1 == null || input1 == "")
+	{
+	  document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+	  $("#input_1").addClass("has-warning has-feedback");
+	}
+	else
+	{
+	   $("#input_1").removeClass("has-warning has-feedback");
+	   document.getElementById("err-msg").innerHTML = "";
+	}
 	try{
     	tableCreate();
 	}
@@ -84,16 +95,6 @@ $('input').bind('input propertychange', function() {
 			$("#input_2").addClass("has-warning has-feedback");
 		}
 	}
-	var input1 = document.getElementById("equation").value;
-	  if(input1 == null || input1 == "")
-	  {
-	    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
-	    $("#input_1").addClass("has-warning has-feedback");
-	  }
-	  else
-	  {
-	  	 $("#input_1").removeClass("has-warning has-feedback");
-	     document.getElementById("err-msg").innerHTML = "";
-	  }
+	
 });
 </script>
