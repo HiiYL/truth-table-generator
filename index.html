@@ -6,23 +6,27 @@
   <body>
   <p>
     Input 1: <input type = "text" id="equation">
+    <span id = "err-msg"></span>
   </p>
   <p>
     Input 2: <input type = "text" id="equation2">
   </p>
     <input type = button value = "submit" id="submit">
   </body>
+  <table id = "result">
+    
+  </table>
 </html>
 <script>
-
 document.write("Javascript is working");
 var table = document.getElementById("output");
 document.getElementById("submit").onclick = function() {
+
   try{
     tableCreate();
   }
   catch(err) {
-    alert("SYNTAX ERROR");  
+    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
   }
 };
 </script>

@@ -42,11 +42,14 @@ function tableCreate()
   var x = document.getElementById("equation").value;
   var a = document.getElementById("equation2").value;
   var y = parseString(x);
-  
-  
-  
-  
-  
+  if(x == null || x == "")
+  {
+    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+  }
+  else
+  {
+     document.getElementById("err-msg").innerHTML = "";
+  }
   if(a != null && a != "")
     var a_is_filled = true;
   else
@@ -69,8 +72,9 @@ function tableCreate()
   }
   var z = "function wow(" + uniques_str + ") {return(" + y +  ");}";
   eval(z);
-  var body=document.getElementsByTagName('body')[0];
-  var tbl=document.createElement('table');
+  //var body=document.getElementsByTagName('body')[0];
+  var tbl=document.getElementById('result');
+  document.getElementById('result').innerHTML = "";
   tbl.style.width='100%';
   tbl.setAttribute('border','1');
   var tbdy=document.createElement('tbody');
@@ -132,7 +136,7 @@ function tableCreate()
       tbdy.appendChild(tr);
   }
   tbl.appendChild(tbdy);
-  body.appendChild(tbl);
+  //body.appendChild(tbl);
 };
 function getUnique()
 {
