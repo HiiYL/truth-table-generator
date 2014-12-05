@@ -17,6 +17,29 @@ String.prototype.regexLastIndexOf = function(regex, startpos) {
     }
     return lastIndexOf;
 }
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}   
   function load(uniques) {
   //var uniques = ["A","B"];
   var test = new Array(Math.pow(2,uniques.length));
@@ -39,12 +62,13 @@ String.prototype.regexLastIndexOf = function(regex, startpos) {
 };
 function tableCreate()
 {
+
   var x = document.getElementById("equation").value;
   var a = document.getElementById("equation2").value;
   var y = parseString(x);
   if(x == null || x == "")
   {
-    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+    //document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
   }
   else
   {
@@ -75,10 +99,15 @@ function tableCreate()
   //var body=document.getElementsByTagName('body')[0];
   var tbl=document.getElementById('result');
   document.getElementById('result').innerHTML = "";
-  tbl.style.width='100%';
-  tbl.setAttribute('border','1');
   var tbdy=document.createElement('tbody');
   var tr = document.createElement('tr');
+
+  var ans_array = [];
+  for(var i = 0; i < 2; i++)
+  {
+      ans_array[i] = new Array(uniques.length);
+  }
+
   for (var i = 0 ; i < uniques.length; i++)
   {
     var th = document.createElement('th');
@@ -121,10 +150,12 @@ function tableCreate()
         td.appendChild(document.createTextNode("1"));
      else
         td.appendChild(document.createTextNode("0"));
+      ans_array[0].push(ans);
       tr.appendChild(td);
       if(a_is_filled)
       {  
             var ans = equation2.apply(null, test[i]);
+            ans_array[1].push(ans);
             var td=document.createElement('td');
             if(ans)
               td.appendChild(document.createTextNode("1"));
@@ -136,6 +167,21 @@ function tableCreate()
       tbdy.appendChild(tr);
   }
   tbl.appendChild(tbdy);
+  if(a_is_filled)
+  {
+    if(ans_array[0].equals(ans_array[1]))
+    {
+      document.getElementById("isEqual").innerHTML = "#1 and #2 is equal";
+    }
+    else
+    {
+      document.getElementById("isEqual").innerHTML = "#1 and #2 is not equal";
+    }
+  }
+  else
+  {
+    document.getElementById("isEqual").innerHTML = "";
+  }
   //body.appendChild(tbl);
 };
 function getUnique()

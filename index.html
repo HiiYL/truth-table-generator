@@ -2,31 +2,96 @@
   <head>
     <title>Truth Table Generator</title>
     <script src="utilfunctions.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <!--
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="jquery-2.1.1.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"> 
+    -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   </head>
   <body>
-  <p>
-    Input 1: <input type = "text" id="equation">
-    <span id = "err-msg"></span>
-  </p>
-  <p>
-    Input 2: <input type = "text" id="equation2">
-  </p>
-    <input type = button value = "submit" id="submit">
+
+  	<div class="container">
+	  <header>
+	      <nav>
+	        <ul class="nav nav-pills pull-right">
+	          <li role="presentation" class="active"><a href="index.html">Home</a></li>
+	          <li role="presentation"><a href="about.html">About</a></li>
+	        </ul>
+	      </nav>
+	      <h3 class="text-muted">Truth Table Generator</h3>
+	  </header>
+	  <div class="container">
+	  <div class="alert alert-info alert-dismissible">
+	  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	  <p>Note: The app is case sensitive, meaning a is not equal to A</p>
+	  </div>
+	  <div class="alert alert-info alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	  	Commands:
+	  	<p>
+	  	  + => OR gate
+	  	</p>
+	  	<p>
+	  	  * => AND gate
+	  	</p>
+	  	<p>
+	  	 ^ => XOR gate
+	  	</p>
+	  	<p>
+	  	  ' => NOT gate
+	  	</p>
+	  </div>
+	  <p>
+	  	<div class="formgroup" id="input_1">
+	    <label class="control-label">Input 1:</label>
+	    <input type = "text" id="equation"  class="form-control ">
+	    <div id = "err-msg"></div>
+	    </div>
+	  </p>
+	  <p>
+	    <label class="control-label">Input 2:</label> 
+	    <input type = "text" id="equation2"  class="form-control">
+	  </p>
+	    <input type = button value = "submit" id="submit" class="btn btn-default">
+	   <table id = "result" class="table table-bordered table-hover" >
+	   </table>
+	   <div id="isEqual"></div>
+	   </div>
+  	</div>
   </body>
-  <table id = "result">
-    
-  </table>
-</html>
 <script>
-document.write("Javascript is working");
 var table = document.getElementById("output");
 document.getElementById("submit").onclick = function() {
+  var input1 = document.getElementById("equation").value;
+  if(input1 == null || input1 == "")
+  {
+    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+  }
+  else
+  {
+     document.getElementById("err-msg").innerHTML = "";
+  }
+  /*
+  var input1 = document.getElementById("equation");
+  if( input1 == null || input1 =="")
+  {
+  	document.getElementById("equation").setAttribute("has-warning");
+  	document.getElementById("err-msg").innerHTML = "Field 52 must not be blank!";
+  }
+  else
+  {
 
+  }
+  */
   try{
     tableCreate();
   }
   catch(err) {
-    document.getElementById("err-msg").innerHTML = "Field 1 must not be blank!";
+    
   }
 };
 </script>
