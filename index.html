@@ -1,64 +1,148 @@
 <html>
   <head>
-
   </head>
   <body>
-    <p>
-      Input 1: <input type = "text" id="equation">
-    </p>
-    <p>
+  <p>
+    Input 1: <input type = "text" id="equation">
+  </p>
+  <p>
     Input 2: <input type = "text" id="equation2">
-    </p>
+  </p>
     <input type = button value = "submit" id="submit">
-    <p id="foo">OUTPUT</p>
-    <table id="output">
-      <tr>
-        <th colspan=2>Input Value</th>
-        <th colspan=2>Result</th>
-      </tr>
-      <tr>
-        <th>A</th>
-        <th>B</th>
-        <th>#1</th>
-        <th>#2</th>
-      </tr>
-      
-    </table>
   </body>
 </html>
 <script>
-function tableCreate(){
-var body=document.getElementsByTagName('body')[0];
-var tbl=document.createElement('table');
-tbl.style.width='100%';
-tbl.setAttribute('border','1');
-var tbdy=document.createElement('tbody');
-var tr = document.createElement('tr');
-for (var i = 0 ; i < 5; i++)
+String.prototype.removeAt=function(index) {
+    return this.substr(0, index) + this.substr(index+1);
+}
+String.prototype.regexLastIndexOf = function(regex, startpos) {
+    regex = (regex.global) ? regex : new RegExp(regex.source, "g" + (regex.ignoreCase ? "i" : "") + (regex.multiLine ? "m" : ""));
+    if(typeof (startpos) == "undefined") {
+        startpos = this.length;
+    } else if(startpos < 0) {
+        startpos = 0;
+    }
+    var stringToWorkWith = this.substring(0, startpos + 1);
+    var lastIndexOf = -1;
+    var nextStop = 0;
+    while((result = regex.exec(stringToWorkWith)) != null) {
+        lastIndexOf = result.index;
+        regex.lastIndex = ++nextStop;
+    }
+    return lastIndexOf;
+}
+  function load(uniques) {
+  //var uniques = ["A","B"];
+  var test = new Array(Math.pow(2,uniques.length));
+  for(i = 0 ; i < Math.pow(2,uniques.length); i++)
+    test[i] = new Array(uniques.length);
+  for(var i = 0; i < uniques.length; i++)
+    {
+      var x = false; 
+      for(j = 0, k = 1; j < Math.pow(2,uniques.length); j++,k++)
+      {   
+        if(k > (Math.pow(2,uniques.length)/Math.pow(2,i+1))) 
+        {
+           x = !x;
+           k = 1;
+        }
+        test[j][i]=x;
+        console.log(i + " " + j +" "+test[j][i].toString());
+      }
+      console.log("END");
+    }
+  return test;
+};
+function tableCreate()
 {
+  var x = document.getElementById("equation").value;
+  var y = parseString(x);
+  var uniques1 = getUnique(x);
+  var uniques1_str = uniques1.join(",");
+  var z = "function wow(" + uniques1_str + ") {return(" + y +  ");}";
+  eval(z);
+  var a = document.getElementById("equation2").value;
+  if(a != null && a != "")
+    var a_is_filled = true;
+  else
+    var a_is_filled = false;
+  console.log("A IS FILLED IS " + a_is_filled.toString());
+  if(a_is_filled)
+  {
+    var b = parseString(a);
+    var uniques2 = getUnique(a);
+    var uniques2_str = uniques2.join(",");
+    var c = "function equation2(" + uniques2_str + ") {return(" + b +  ");}";
+    eval(c);
+  }
+  
+  var body=document.getElementsByTagName('body')[0];
+  var tbl=document.createElement('table');
+  tbl.style.width='100%';
+  tbl.setAttribute('border','1');
+  var tbdy=document.createElement('tbody');
+  var tr = document.createElement('tr');
+  var uniques = uniques1;
+  for (var i = 0 ; i < uniques.length; i++)
+  {
+    var th = document.createElement('th');
+    var newContent = document.createTextNode(uniques[i]);
+    th.appendChild(newContent);
+    tr.appendChild(th);
+  }
   var th = document.createElement('th');
-  var newContent = document.createTextNode("wow");
+  var newContent = document.createTextNode("#1");
   th.appendChild(newContent);
   tr.appendChild(th);
-}
-tbdy.appendChild(tr);
-for(var i=0;i<5;i++){
-    var tr=document.createElement('tr');
-    for(var j=0;j<2;j++){
-        if(i==2 && j==1){
-                break
-                 } else {
-        var td=document.createElement('td');
-        td.appendChild(document.createTextNode('\u0020'))
-        i==1&&j==1?td.setAttribute('rowSpan','2'):null;
-        tr.appendChild(td)
-        }
-    }
-    tbdy.appendChild(tr);
-}
-tbl.appendChild(tbdy);
-body.appendChild(tbl)
-}
+  if(a_is_filled)
+  {
+    var th = document.createElement('th');
+    var newContent = document.createTextNode("#2");
+    th.appendChild(newContent);
+  }
+  
+  tr.appendChild(th);
+  tbdy.appendChild(tr);
+  var test = load(uniques);
+  for(var i=0;i<Math.pow(2,uniques.length);i++){
+      var tr=document.createElement('tr');
+      for(var j=0;j<uniques.length;j++){
+          var td=document.createElement('td');
+         console.log(i + " " + j +" "+test[i][j].toString());
+          if(test[i][j] == true)
+            {
+              td.appendChild(document.createTextNode("1"));
+            }
+          else
+            {
+          td.appendChild(document.createTextNode("0"));
+            }
+          tr.appendChild(td);
+      }
+     var argument = test[i].join(",");
+     var ans = wow.apply(null, test[i]); 
+     var td=document.createElement('td');
+     if(ans)
+        td.appendChild(document.createTextNode("1"));
+     else
+        td.appendChild(document.createTextNode("0"));
+      tr.appendChild(td);
+      if(a_is_filled)
+      {  
+            var ans = equation2.apply(null, test[i]);
+            var td=document.createElement('td');
+            if(ans)
+              td.appendChild(document.createTextNode("1"));
+            else
+              td.appendChild(document.createTextNode("0"));
+            //td.appendChild(document.createTextNode(ans.toString()));
+            tr.appendChild(td);
+      }
+      tbdy.appendChild(tr);
+  }
+  tbl.appendChild(tbdy);
+  body.appendChild(tbl);
+};
 function getUnique(s)
 {
   var chars = [];
@@ -76,70 +160,41 @@ function insertAt(src, index, str) {
     return src.substr(0, index) + str + src.substr(index)
 };
 function parseString(str) {
-  i = str.search(/[A-Z][A-Z]/gi);
+  l = str.regexLastIndexOf(/[)][']/gi);
+  while(l != -1)
+  {
+    
+    m = str.search(/[(].*[)][']/gi);
+    str = str.removeAt(l+1);
+    str = insertAt(str, m, "!");
+    l = str.regexLastIndexOf(/[)][']/gi);
+  }
+  k = str.search(/[A-Z][']/gi);
+  while(k != -1)
+  {
+    str = str.replace("'","");
+    str = insertAt(str, k, "!");
+    k = str.search(/[A-Z][']/gi);
+  }
+  i = str.search(/[A-Z][!]?[(]?[A-Z]/gi);
   while(i != -1)
   {
     str = insertAt(str, i+1, "&&");
-    i = str.search(/[A-Z][A-Z]/gi);
+    i = str.search(/[A-Z][!]?[A-Z]/gi);
+  }
+  j = str.search(/[)][A-Z]/gi);
+  while(j != -1)
+  {
+    str = insertAt(str, j+1, "&&");
+    j = str.search(/[)][A-Z]/gi);
   }
   str = str.replace(/[+]/g,"||").replace(/[)][(]/g, ")&&(").replace(/\^/g, "!=");
+
   return str;
 };
-
-var x = document.getElementById("equation").value;
-var y = x.replace("+","&&").replace(")(",")||(");
-var z = "function wow() {return(" + y +  ");}";
-var gooby = false;
-document.write("HELLO THERE");
+document.write("Javascript is working");
 var table = document.getElementById("output");
 document.getElementById("submit").onclick = function() {
   tableCreate();
-  var x = document.getElementById("equation").value;
-  var y = parseString(x);
-  var uniques1 = getUnique(x);
-  uniques1 = uniques1.join(",");
-  var z = "function wow(" + uniques1 + ") {return(" + y +  ");}";
-  var a = document.getElementById("equation2").value;
-  var b = parseString(a);
-  var uniques2 = getUnique(a);
-  uniques2 = uniques2.join(",");
-  var c = "function equation2(" + uniques2 + ") {return(" + b +  ");}";
-  eval(z);
-  eval(c);
-  var A;
-  var B;
-  for( i = 1 ; i < 5 ; i ++)
-    {
-      var row = table.insertRow(i+1);
-      
-      if(i%2)
-        {
-          B = false;
-        }
-      else
-        {
-          B = true;
-        }
-      if(i>2)
-        {
-          A = true;
-        }
-     else
-       {
-         A = false;
-       }
-      for(j = 1; j < 2; j ++)
-        {
-         var cell1 = row.insertCell(0);
-          var cell2 = row.insertCell(1);
-          var cell3 = row.insertCell(2);
-          var cell4 = row.insertCell(3);
-          cell1.innerHTML = A.toString();
-          cell2.innerHTML = B.toString(); 
-          cell3.innerHTML = wow(A,B).toString();
-          cell4.innerHTML = equation2(A,B).toString();
-        }
-    }
-  //document.getElementById("foo").innerHTML = wow(true,false).toString();
 };
 </script>
