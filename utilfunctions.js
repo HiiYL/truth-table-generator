@@ -85,17 +85,29 @@ function tableCreate()
     var uniques = getUnique(x,a);
     var uniques_str = uniques.join(",");
     var c = "function equation2(" + uniques_str + ") {return(" + b +  ");}";
-    eval(c);
-    console.log("A IS FILLED AND UNIQUES IS ");
+    try {
+      eval(c);
+    }
+    catch(err)
+    {
+      throw new SyntaxError("input 2 syntax error");
+    }
   }
   else
   {
-    console.log("A IS NOT FILLED AND UNIQUES IS ");
     var uniques = getUnique(x);
     var uniques_str = uniques.join(",");
   }
   var z = "function wow(" + uniques_str + ") {return(" + y +  ");}";
+  $("#input_1").removeClass("has-warning has-feedback");
+  try{
   eval(z);
+  }
+  catch(err)
+  {
+    throw new SyntaxError("input 1 syntax error");
+    //$("#input_1").addClass("has-warning has-feedback");
+  }
   //var body=document.getElementsByTagName('body')[0];
   var tbl=document.getElementById('result');
   document.getElementById('result').innerHTML = "";
@@ -143,7 +155,9 @@ function tableCreate()
             }
           tr.appendChild(td);
       }
+     
      var argument = test[i].join(",");
+
      var ans = wow.apply(null, test[i]); 
      var td=document.createElement('td');
      if(ans)
@@ -152,6 +166,7 @@ function tableCreate()
         td.appendChild(document.createTextNode("0"));
       ans_array[0].push(ans);
       tr.appendChild(td);
+
       if(a_is_filled)
       {  
             var ans = equation2.apply(null, test[i]);
@@ -167,6 +182,7 @@ function tableCreate()
       tbdy.appendChild(tr);
   }
   tbl.appendChild(tbdy);
+
   if(a_is_filled)
   {
     if(ans_array[0].equals(ans_array[1]))

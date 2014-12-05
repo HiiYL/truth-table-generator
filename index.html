@@ -47,15 +47,17 @@
 	  </div>
 	  <p>
 	  	<div class="formgroup" id="input_1">
-	    <label class="control-label">Input 1:</label>
-	    <input type = "text" id="equation"  class="form-control" placeholder="A(B^C')'+D">
-	    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-	    <div id = "err-msg"></div>
+		    <label class="control-label">Input 1:</label>
+		    <input type = "text" id="equation"  class="form-control" placeholder="A(B^C')'+D">
+		    <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+		    <div id = "err-msg"></div>
 	    </div>
 	  </p>
 	  <p>
+	   <div class="formgroup" id="input_2">
 	    <label class="control-label">Input 2:</label> 
 	    <input type = "text" id="equation2"  class="form-control" placeholder="A(B^C')'+D">
+	   </div>
 	  </p>
 	    <input type = button value = "submit" id="submit" class="btn btn-default" >
 	   <table id = "result" class="table table-bordered table-hover" >
@@ -66,14 +68,22 @@
   </body>
 <script>
 $('input').bind('input propertychange', function() {
-    try{
-    	$("#input_1").removeClass("has-warning has-feedback");
+	$("#input_1").removeClass("has-warning has-feedback");
+	$("#input_2").removeClass("has-warning has-feedback");
+	try{
     	tableCreate();
-    }
-    catch(err)
-    {
-    	$("#input_1").addClass("has-warning has-feedback");
-    }
+	}
+	catch(err)
+	{
+		if(err.message.toString() == "input 1 syntax error")
+		{
+			$("#input_1").addClass("has-warning has-feedback");
+		}
+		if(err.message.toString() == "input 2 syntax error")
+		{
+			$("#input_2").addClass("has-warning has-feedback");
+		}
+	}
 });
 var table = document.getElementById("output");
 document.getElementById("submit").onclick = function() {
