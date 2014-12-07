@@ -40,43 +40,41 @@ Array.prototype.equals = function (array) {
     }       
     return true;
 }   
-  function load(uniques) {
-  //var uniques = ["A","B"];
-  var test = new Array(Math.pow(2,uniques.length));
+function generateDefaultTruthTable(uniques) {
+  var truth_matrix = new Array(Math.pow(2,uniques.length));
   for(i = 0 ; i < Math.pow(2,uniques.length); i++)
-    test[i] = new Array(uniques.length);
+    truth_matrix[i] = new Array(uniques.length);      //generates a 2d array the size of the entire truth table
   for(var i = 0; i < uniques.length; i++)
     {
-      var x = false; 
+      var current_truth_value = false; 
       for(j = 0, k = 1; j < Math.pow(2,uniques.length); j++,k++)
       {   
         if(k > (Math.pow(2,uniques.length)/Math.pow(2,i+1))) 
         {
-           x = !x;
+           current_truth_value = !current_truth_value;
            k = 1;
         }
-        test[j][i]=x;
+        truth_matrix[j][i]=current_truth_value;
       }
     }
-  return test;
+  return truth_matrix;
 };
 function tableCreate()
 {
 
-  var x = document.getElementById("equation").value;
-  var a = document.getElementById("equation2").value;
-  var y = parseString(x);
-  if(a != null && a != "")
-    var a_is_filled = true;
+  var input_1 = document.getElementById("equation").value;
+  var input_2 = document.getElementById("equation2").value;
+  var parsed_input_1 = parseString(input_1);
+  if(input_2 != null && input_2 != "")
+    var input_2_is_filled = true;
   else
-    var a_is_filled = false;
-  //console.log("A IS FILLED IS " + a_is_filled.toString());
-  if(a_is_filled)
+    var input_2_is_filled = false;
+  if(input_2_is_filled)
   {
-    var b = parseString(a);
-    var uniques = getUnique(x,a);
+    var parsed_input_2 = parseString(input_2);
+    var uniques = getUnique(input_1,input_2);
     var uniques_str = uniques.join(",");
-    var c = "function equation2(" + uniques_str + ") {return(" + b +  ");}";
+    var c = "function equation2(" + uniques_str + ") {return(" + parsed_input_2 +  ");}";
     try {
       eval(c);
     }
@@ -87,20 +85,17 @@ function tableCreate()
   }
   else
   {
-    var uniques = getUnique(x);
+    var uniques = getUnique(input_1);
     var uniques_str = uniques.join(",");
   }
-  var z = "function wow(" + uniques_str + ") {return(" + y +  ");}";
-  $("#input_1").removeClass("has-warning has-feedback");
+  var z = "function equation1(" + uniques_str + ") {return(" + parsed_input_1 +  ");}";
   try{
-  eval(z);
+    eval(z);
   }
   catch(err)
   {
     throw new SyntaxError("input 1 syntax error");
-    //$("#input_1").addClass("has-warning has-feedback");
   }
-  //var body=document.getElementsByTagName('body')[0];
   var tbl=document.getElementById('result');
   document.getElementById('result').innerHTML = "";
   var tbdy=document.createElement('tbody');
@@ -123,7 +118,7 @@ function tableCreate()
   var newContent = document.createTextNode("#1");
   th.appendChild(newContent);
   tr.appendChild(th);
-  if(a_is_filled)
+  if(input_2_is_filled)
   {
     var th = document.createElement('th');
     var newContent = document.createTextNode("#2");
@@ -132,12 +127,12 @@ function tableCreate()
   
   tr.appendChild(th);
   tbdy.appendChild(tr);
-  var test = load(uniques);
+  var truth_matrix = generateDefaultTruthTable(uniques);
   for(var i=0;i<Math.pow(2,uniques.length);i++){
       var tr=document.createElement('tr');
       for(var j=0;j<uniques.length;j++){
           var td=document.createElement('td');
-          if(test[i][j] == true)
+          if(truth_matrix[i][j] == true)
             {
               td.appendChild(document.createTextNode("1"));
             }
@@ -148,9 +143,9 @@ function tableCreate()
           tr.appendChild(td);
       }
      
-     var argument = test[i].join(",");
+     var argument = truth_matrix[i].join(",");
 
-     var ans = wow.apply(null, test[i]); 
+     var ans = equation1.apply(null, truth_matrix[i]); 
      var td=document.createElement('td');
      if(ans)
         td.appendChild(document.createTextNode("1"));
@@ -159,23 +154,21 @@ function tableCreate()
       ans_array[0].push(ans);
       tr.appendChild(td);
 
-      if(a_is_filled)
+      if(input_2_is_filled)
       {  
-            var ans = equation2.apply(null, test[i]);
+            var ans = equation2.apply(null, truth_matrix[i]);
             ans_array[1].push(ans);
             var td=document.createElement('td');
             if(ans)
               td.appendChild(document.createTextNode("1"));
             else
               td.appendChild(document.createTextNode("0"));
-            //td.appendChild(document.createTextNode(ans.toString()));
             tr.appendChild(td);
       }
       tbdy.appendChild(tr);
   }
   tbl.appendChild(tbdy);
-
-  if(a_is_filled)
+  if(input_2_is_filled)
   {
     if(ans_array[0].equals(ans_array[1]))
     {
@@ -190,7 +183,6 @@ function tableCreate()
   {
     document.getElementById("isEqual").innerHTML = "";
   }
-  //body.appendChild(tbl);
 };
 function getUnique()
 {
@@ -199,7 +191,6 @@ function getUnique()
   {
     for( j = 0; j < arguments[i].length; j++)
     {
-      //console.log(arguments[i][i] + /[A-Z]/gi.test(arguments[i][i]).toString());
       if(chars.indexOf(arguments[i][j])==-1 && /[A-Z]/gi.test(arguments[i][j]))
       {
         chars.push(arguments[i][j]);
